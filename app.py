@@ -5,7 +5,6 @@ from datetime import datetime
 
 import cv2
 import numpy as np
-from scipy.spatial.distance import cosine
 from deepface import DeepFace
 
 from flask import Flask, render_template, redirect, url_for, request, flash, session
