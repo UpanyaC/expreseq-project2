@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0b1020; color: white; margin: 0; }
+        .header { background: #1d4ed8; padding: 16px 24px; font-size: 22px; font-weight: bold; }
+        .content { padding: 30px; }
+        .card { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; margin-top: 20px; }
+        a { color: white; background: #2563eb; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">Bank</div>
+    <div class="content">
+        <h2>🔓 Access Granted</h2>
+        <div class="card">
+            <h3>Account Overview</h3>
+            <p>Checking Balance: $12,450.00</p>
+            <p>Savings Balance: $48,200.00</p>
+            <p>This is a secure banking demo page protected by ExpreseQ.</p>
+        </div>
+        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

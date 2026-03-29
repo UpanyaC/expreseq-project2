@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpreseQ Verify Access</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0b1020, #131c35);
+            margin: 0;
+            padding: 0;
+            color: #e5e7eb;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .topbar {
+            background: rgba(255,255,255,0.06);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .topbar h2 {
+            margin: 0 0 6px 0;
+            font-size: 28px;
+        }
+
+        .topbar p {
+            margin: 0;
+            color: #cbd5e1;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            background: rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .flash {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .flash.success {
+            background: rgba(34, 197, 94, 0.14);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            color: #bbf7d0;
+        }
+
+        .flash.warning {
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fde68a;
+        }
+
+        .flash.danger {
+            background: rgba(239, 68, 68, 0.14);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #fecaca;
+        }
+
+        .result-box {
+            margin-bottom: 18px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-title.verified {
+            color: #86efac;
+        }
+
+        .result-title.retry {
+            color: #fde68a;
+        }
+
+        .result-title.denied {
+            color: #fecaca;
+        }
+
+        .result-scores {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        .result-message {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .verify-card {
+            background: rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .section-subtitle {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .camera-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            max-width: 520px;
+            border: 2px solid #1f2937;
+            border-radius: 14px;
+            background: black;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .controls button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .controls button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-start-camera { background: #2563eb; color: white; }
+        .btn-start-verify { background: #059669; color: white; }
+        .btn-stop { background: #dc2626; color: white; }
+        .btn-submit { background: #111827; color: white; }
+        .btn-retake { background: #6b7280; color: white; }
+
+        .status-box {
+            background: rgba(59,130,246,0.12);
+            border: 1px solid rgba(96,165,250,0.28);
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 8px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #dbeafe;
+        }
+
+        .note-box {
+            margin-top: 20px;
+            background: rgba(245,158,11,0.10);
+            border: 1px solid rgba(245,158,11,0.28);
+            padding: 14px;
+            border-radius: 10px;
+            color: #fde68a;
+        }
+
+        .note-box ul {
+            margin: 10px 0 0 18px;
+            padding: 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            background: #374151;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .counter {
+            font-size: 0.95rem;
+            color: #93c5fd;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+
+        .timer {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin-bottom: 14px;
+        }
+
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <h2>Live Verification for {{ app.app_name }}</h2>
+            <p>ExpreseQ is validating your live verification profile using face similarity, expression consistency, and liveness scoring.</p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-label">Access Attempt ID</div>
+                <div class="info-value">{{ attempt.id }}</div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-label">Current Status</div>
+                <div class="info-value">{{ attempt.status }}</div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-label">Protected App</div>
+                <div class="info-value">{{ app.app_name }}</div>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% if decision %}
+        <div class="result-box">
+            <div class="result-title
+                {% if decision == 'verified' %}
+                    verified
+                {% elif decision == 'retry' %}
+                    retry
+                {% else %}
+                    denied
+                {% endif %}
+            ">
+                {{ decision | upper }}
+            </div>
+
+            <div class="result-scores">
+                <div>Face: {{ '%.2f'|format(face_score or 0) }}</div>
+                <div>Expression: {{ '%.2f'|format(expression_score or 0) }}</div>
+                <div>Liveness: {{ '%.2f'|format(liveness_score or 0) }}</div>
+            </div>
+
+            <div class="result-message">
+                {% if decision == 'verified' %}
+                    ✅ You're verified successfully.
+                {% elif decision == 'retry' %}
+                    ⚠ Try again with better alignment or clearer expression.
+                {% else %}
+                    ❌ Access denied. Unauthorized attempt detected.
+                {% endif %}
+
+                {% if reason %}
+                    <br>Reason: {{ reason }}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="verify-card">
+            <h3 class="section-title">Live Camera Verification</h3>
+            <div class="section-subtitle">
+                Face the camera naturally, keep your face centered, and make small natural movements during verification.
+            </div>
+
+            <div class="camera-box">
+                <video id="preview" autoplay muted playsinline></video>
+            </div>
+
+            <canvas id="captureCanvas"></canvas>
+
+            <div class="controls">
+                <button id="startCameraBtn" type="button" class="btn-start-camera">Start Camera</button>
+                <button id="startRecordBtn" type="button" class="btn-start-verify" disabled>Start Live Verification</button>
+                <button id="stopRecordBtn" type="button" class="btn-stop" disabled>Stop Verification</button>
+                <button id="submitBtn" type="button" class="btn-submit" disabled>Submit Verification</button>
+                <button id="retakeBtn" type="button" class="btn-retake" disabled>Retake</button>
+            </div>
+
+            <div class="counter" id="frameCounter">Frames captured: 0</div>
+            <div class="timer" id="timerText">Recording time: 0.0s</div>
+            <div id="statusText" class="status-box">Camera not started.</div>
+
+            <div class="note-box">
+                <strong>Security Note:</strong>
+                <ul>
+                    <li>ExpreseQ captures multiple live frames during verification.</li>
+                    <li>At least 4 frames are required for a valid verification attempt.</li>
+                    <li>If the result is unclear, ExpreseQ may ask you to retry.</li>
+                    <li>If the result fails strongly, ExpreseQ blocks access and stores evidence in the alerts page.</li>
+                </ul>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}" class="back-link">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        let mediaStream = null;
+        let capturedFrames = [];
+        let captureInterval = null;
+        let timerInterval = null;
+        let isRecording = false;
+        let isSubmitting = false;
+        let recordingStartTime = null;
+
+        const preview = document.getElementById("preview");
+        const canvas = document.getElementById("captureCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const startCameraBtn = document.getElementById("startCameraBtn");
+        const startRecordBtn = document.getElementById("startRecordBtn");
+        const stopRecordBtn = document.getElementById("stopRecordBtn");
+        const submitBtn = document.getElementById("submitBtn");
+        const retakeBtn = document.getElementById("retakeBtn");
+        const statusText = document.getElementById("statusText");
+        const frameCounter = document.getElementById("frameCounter");
+        const timerText = document.getElementById("timerText");
+
+        function updateFrameCounter() {
+            frameCounter.textContent = `Frames captured: ${capturedFrames.length}`;
+        }
+
+        function updateTimer() {
+            if (!recordingStartTime) {
+                timerText.textContent = "Recording time: 0.0s";
+                return;
+            }
+            const seconds = (Date.now() - recordingStartTime) / 1000;
+            timerText.textContent = `Recording time: ${seconds.toFixed(1)}s`;
+        }
+
+        function setButtonsForIdle() {
+            startRecordBtn.disabled = !mediaStream;
+            stopRecordBtn.disabled = true;
+            submitBtn.disabled = capturedFrames.length < 4;
+            retakeBtn.disabled = capturedFrames.length === 0;
+        }
+
+        function setButtonsForSubmitting() {
+            startCameraBtn.disabled = true;
+            startRecordBtn.disabled = true;
+            stopRecordBtn.disabled = true;
+            submitBtn.disabled = true;
+            retakeBtn.disabled = true;
+        }
+
+        startCameraBtn.addEventListener("click", async () => {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                });
+
+                preview.srcObject = mediaStream;
+                statusText.textContent = "Camera started. Ready for live verification.";
+                startRecordBtn.disabled = false;
+            } catch (error) {
+                console.error(error);
+                statusText.textContent = "Unable to access camera.";
+            }
+        });
+
+        function captureFrame() {
+            if (!preview.videoWidth || !preview.videoHeight) return;
+
+            canvas.width = preview.videoWidth;
+            canvas.height = preview.videoHeight;
+            ctx.drawImage(preview, 0, 0, canvas.width, canvas.height);
+
+            const frameData = canvas.toDataURL("image/jpeg", 0.8);
+            capturedFrames.push(frameData);
+            updateFrameCounter();
+        }
+
+        startRecordBtn.addEventListener("click", () => {
+            if (!mediaStream) {
+                statusText.textContent = "Please start the camera first.";
+                return;
+            }
+
+            capturedFrames = [];
+            updateFrameCounter();
+
+            isRecording = true;
+            recordingStartTime = Date.now();
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 100);
+
+            captureFrame();
+            captureInterval = setInterval(captureFrame, 700);
+
+            statusText.textContent = "Capturing live verification frames...";
+            startRecordBtn.disabled = true;
+            stopRecordBtn.disabled = false;
+            submitBtn.disabled = true;
+            retakeBtn.disabled = true;
+        });
+
+        stopRecordBtn.addEventListener("click", () => {
+            if (!isRecording) return;
+
+            isRecording = false;
+            clearInterval(captureInterval);
+            clearInterval(timerInterval);
+            captureFrame();
+            updateTimer();
+
+            statusText.textContent = `Captured ${capturedFrames.length} frames. Review and submit, or retake.`;
+            stopRecordBtn.disabled = true;
+            submitBtn.disabled = capturedFrames.length < 4;
+            retakeBtn.disabled = false;
+            startRecordBtn.disabled = false;
+        });
+
+        retakeBtn.addEventListener("click", () => {
+            if (isSubmitting) return;
+
+            capturedFrames = [];
+            updateFrameCounter();
+            recordingStartTime = null;
+            updateTimer();
+            statusText.textContent = "Frames cleared. Ready to verify again.";
+            setButtonsForIdle();
+        });
+
+        submitBtn.addEventListener("click", async () => {
+            if (capturedFrames.length < 4) {
+                statusText.textContent = "At least 4 frames are required. Please record again.";
+                return;
+            }
+
+            if (isSubmitting) return;
+            isSubmitting = true;
+
+            statusText.textContent = "Submitting verification... please wait. This may take a few seconds.";
+            const originalSubmitText = submitBtn.textContent;
+            submitBtn.textContent = "Submitting...";
+            setButtonsForSubmitting();
+
+            try {
+                const response = await fetch(window.location.pathname, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        frames: capturedFrames
+                    })
+                });
+
+                const text = await response.text();
+                document.open();
+                document.write(text);
+                document.close();
+            } catch (error) {
+                console.error(error);
+                isSubmitting = false;
+                submitBtn.textContent = originalSubmitText;
+                statusText.textContent = "Failed to submit verification.";
+                startCameraBtn.disabled = false;
+                setButtonsForIdle();
+            }
+        });
+    </script>
+<!-- Multilingual ExpreseQ Bot -->
+<div id="botContainer">
+    <div id="botChat">
+        <div id="botHeader">
+            <span>ExpreseQ Assistant</span>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </div>
+        <div id="botMessages"></div>
+    </div>
+    <div id="botBubble">💬</div>
+</div>
+
+<style>
+#botContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+#botBubble {
+    width: 62px;
+    height: 62px;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+#botChat {
+    display: none;
+    width: 320px;
+    height: 380px;
+    background: #0b1020;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+#botHeader {
+    background: #2563eb;
+    padding: 12px;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#languageSelect {
+    background: white;
+    color: #111827;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
+#botMessages {
+    padding: 12px;
+    font-size: 14px;
+    height: 320px;
+    overflow-y: auto;
+    color: #e5e7eb;
+    line-height: 1.5;
+}
+
+.bot-msg {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+</style>
+<script>
+const botBubble = document.getElementById("botBubble");
+const botChat = document.getElementById("botChat");
+const botMessages = document.getElementById("botMessages");
+const languageSelect = document.getElementById("languageSelect");
+
+let botStarted = false;
+let selectedLanguage = localStorage.getItem("expreseq_lang") || "en";
+languageSelect.value = selectedLanguage;
+
+const botText = {
+    en: {
+        home1: "Hi 👋 I’m ExpreseQ Assistant.",
+        home2: "I help you protect apps using live facial verification.",
+        register1: "Hi 👋 I’m ExpreseQ Assistant.",
+        register2: "Create your account to activate your human verification firewall.",
+        login1: "Hi 👋 I’m ExpreseQ Assistant.",
+        login2: "Please log in to access your secure dashboard and protected apps.",
+        dashboard1: "Welcome to your secure dashboard.",
+        dashboard2: "Start by adding an app you want to protect.",
+        addApp1: "Enter the name of the app you want to secure.",
+        record1: "Face the camera clearly.",
+        record2: "Record your expression for a few seconds.",
+        verify1: "Please repeat your saved expression.",
+        verify2: "Make small natural movements for verification.",
+        unlocked: "Access granted.",
+        denied: "Access denied.",
+        retry: "Please try again with better alignment or clearer expression."
+    },
+    hi: {
+        home1: "नमस्ते 👋 मैं ExpreseQ सहायक हूँ।",
+        home2: "मैं आपके ऐप्स को लाइव चेहरे की पुष्टि से सुरक्षित रखने में मदद करता हूँ।",
+        register1: "नमस्ते 👋 मैं ExpreseQ सहायक हूँ।",
+        register2: "अपना खाता बनाएं और अपने ऐप्स की सुरक्षा शुरू करें।",
+        login1: "नमस्ते 👋 मैं ExpreseQ सहायक हूँ।",
+        login2: "अपने सुरक्षित डैशबोर्ड और ऐप्स तक पहुँचने के लिए लॉगिन करें।",
+        dashboard1: "आपके सुरक्षित डैशबोर्ड में स्वागत है।",
+        dashboard2: "जिस ऐप को सुरक्षित करना चाहते हैं, उसे जोड़कर शुरू करें।",
+        addApp1: "जिस ऐप को सुरक्षित करना है उसका नाम दर्ज करें।",
+        record1: "कृपया कैमरे की ओर स्पष्ट रूप से देखें।",
+        record2: "कुछ सेकंड के लिए अपनी अभिव्यक्ति रिकॉर्ड करें।",
+        verify1: "कृपया अपनी सहेजी हुई अभिव्यक्ति दोहराएँ।",
+        verify2: "सत्यापन के लिए हल्की प्राकृतिक हरकत करें।",
+        unlocked: "प्रवेश स्वीकृत।",
+        denied: "प्रवेश अस्वीकृत।",
+        retry: "कृपया बेहतर एलाइनमेंट या स्पष्ट अभिव्यक्ति के साथ फिर प्रयास करें।"
+    },
+    te: {
+        home1: "హాయ్ 👋 నేను ExpreseQ సహాయకుడు.",
+        home2: "లైవ్ ఫేషియల్ వెరిఫికేషన్ ద్వారా మీ యాప్‌లను రక్షించడంలో నేను సహాయం చేస్తాను.",
+        register1: "హాయ్ 👋 నేను ExpreseQ సహాయకుడు.",
+        register2: "మీ ఖాతాను సృష్టించి మీ యాప్‌లను రక్షించడం ప్రారంభించండి.",
+        login1: "హాయ్ 👋 నేను ExpreseQ సహాయకుడు.",
+        login2: "మీ సురక్షిత డ్యాష్‌బోర్డ్ మరియు యాప్‌లను యాక్సెస్ చేయడానికి లాగిన్ అవ్వండి.",
+        dashboard1: "మీ సురక్షిత డ్యాష్‌బోర్డ్‌కు స్వాగతం.",
+        dashboard2: "మీరు రక్షించాలనుకునే యాప్‌ను జోడించడం ద్వారా ప్రారంభించండి.",
+        addApp1: "మీరు సురక్షితంగా ఉంచాలనుకునే యాప్ పేరు నమోదు చేయండి.",
+        record1: "దయచేసి కెమెరా వైపు స్పష్టంగా చూడండి.",
+        record2: "కొన్ని సెకన్ల పాటు మీ ఎక్స్‌ప్రెషన్‌ను రికార్డ్ చేయండి.",
+        verify1: "దయచేసి మీరు సేవ్ చేసిన ఎక్స్‌ప్రెషన్‌ను మళ్లీ చేయండి.",
+        verify2: "వెరిఫికేషన్ కోసం స్వల్ప సహజ కదలికలు చేయండి.",
+        unlocked: "ప్రవేశం అనుమతించబడింది.",
+        denied: "ప్రవేశం నిరాకరించబడింది.",
+        retry: "దయచేసి మంచి అలైన్‌మెంట్ లేదా స్పష్టమైన ఎక్స్‌ప్రెషన్‌తో మళ్లీ ప్రయత్నించండి."
+    }
+};
+
+function getLangText(key) {
+    return botText[selectedLanguage]?.[key] || botText.en[key] || "";
+}
+
+function speak(text) {
+    if (!("speechSynthesis" in window)) {
+        console.log("Speech synthesis not supported.");
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    if (selectedLanguage === "hi") {
+        speech.lang = "hi-IN";
+    } else if (selectedLanguage === "te") {
+        speech.lang = "te-IN";
+    } else {
+        speech.lang = "en-US";
+    }
+
+    speech.volume = 1;
+    speech.rate = 1;
+    speech.pitch = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const matchingVoice = voices.find(v => v.lang.toLowerCase().startsWith(speech.lang.toLowerCase().split("-")[0]));
+    if (matchingVoice) {
+        speech.voice = matchingVoice;
+    }
+
+    window.speechSynthesis.speak(speech);
+}
+
+function botSay(message, shouldSpeak = true) {
+    const msg = document.createElement("div");
+    msg.className = "bot-msg";
+    msg.innerText = message;
+    botMessages.appendChild(msg);
+    botMessages.scrollTop = botMessages.scrollHeight;
+
+    if (shouldSpeak) {
+        speak(message);
+    }
+}
+
+function clearBotMessages() {
+    botMessages.innerHTML = "";
+}
+
+function loadPageBotMessages(speakMessages = false) {
+    clearBotMessages();
+    const path = window.location.pathname;
+
+    if (path === "/") {
+        botSay(getLangText("home1"), speakMessages);
+        botSay(getLangText("home2"), speakMessages);
+    } else if (path.includes("dashboard")) {
+        botSay(getLangText("dashboard1"), speakMessages);
+        botSay(getLangText("dashboard2"), speakMessages);
+    }  else if (path.includes("register")) {
+         botSay(getLangText("register1"), speakMessages);
+         botSay(getLangText("register2"), speakMessages);
+    }  else if (path.includes("login")) {
+         botSay(getLangText("login1"), speakMessages);
+         botSay(getLangText("login2"), speakMessages);
+    } else if (path.includes("add_app")) {
+        botSay(getLangText("addApp1"), speakMessages);
+    } else if (path.includes("record_expression")) {
+        botSay(getLangText("record1"), speakMessages);
+        botSay(getLangText("record2"), speakMessages);
+    } else if (path.includes("verify_access")) {
+        botSay(getLangText("verify1"), speakMessages);
+        botSay(getLangText("verify2"), speakMessages);
+    }
+}
+
+botBubble.onclick = () => {
+    const isOpen = botChat.style.display === "block";
+    botChat.style.display = isOpen ? "none" : "block";
+
+    if (!botStarted) {
+        botStarted = true;
+        loadPageBotMessages(true);
+    }
+};
+
+languageSelect.onchange = (e) => {
+    selectedLanguage = e.target.value;
+    localStorage.setItem("expreseq_lang", selectedLanguage);
+    loadPageBotMessages(botStarted);
+};
+
+window.speechSynthesis.onvoiceschanged = () => {
+    console.log("Voices loaded:", window.speechSynthesis.getVoices());
+};
+</script>
+</body>
+</html>

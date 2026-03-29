@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instagram</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #111; color: white; margin: 0; }
+        .header { padding: 16px 24px; font-size: 22px; font-weight: bold; background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045); }
+        .content { padding: 30px; }
+        .post { background: #1c1c1c; border-radius: 12px; padding: 20px; margin-top: 20px; }
+        a { color: white; background: #e1306c; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">Instagram</div>
+    <div class="content">
+        <h2>🔓 Access Granted</h2>
+        <div class="post">
+            <h3>Your Instagram Demo</h3>
+            <p>This is a protected Instagram-style page unlocked after successful verification.</p>
+        </div>
+        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

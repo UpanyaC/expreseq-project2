@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f3f2ef; color: #1d2226; margin: 0; }
+        .header { background: #0a66c2; color: white; padding: 16px 24px; font-size: 22px; font-weight: bold; }
+        .content { padding: 30px; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        a { color: white; background: #0a66c2; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="header">LinkedIn</div>
+    <div class="content">
+        <h2>🔓 Access Granted</h2>
+        <div class="card">
+            <h3>Your LinkedIn Demo Feed</h3>
+            <p>This is a protected LinkedIn-style page unlocked by ExpreseQ verification.</p>
+        </div>
+        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

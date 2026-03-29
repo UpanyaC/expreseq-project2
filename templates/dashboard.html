@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ExpreseQ Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-1: #07111f;
+            --bg-2: #0b1730;
+            --panel: rgba(10, 18, 35, 0.78);
+            --panel-2: rgba(255, 255, 255, 0.05);
+            --line: rgba(255,255,255,0.10);
+            --text: #e5eefc;
+            --muted: #9fb1cf;
+            --blue: #4f8cff;
+            --blue-2: #2563eb;
+            --gold: #f5c96a;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --shadow: 0 20px 60px rgba(0,0,0,0.38);
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(79,140,255,0.20), transparent 30%),
+                radial-gradient(circle at top right, rgba(245,201,106,0.16), transparent 24%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            min-height: 100vh;
+            animation: pageFade 0.7s ease;
+        }
+
+        @keyframes pageFade {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-shell {
+            width: min(1280px, 92%);
+            margin: 28px auto 60px;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(12, 22, 42, 0.88), rgba(15, 28, 56, 0.74));
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(79,140,255,0.20), transparent 24%),
+                radial-gradient(circle at 85% 20%, rgba(245,201,106,0.14), transparent 18%);
+            pointer-events: none;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 13px;
+            color: var(--gold);
+            margin-bottom: 14px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            margin: 14px 0 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a.primary {
+            background: linear-gradient(135deg, var(--blue), var(--blue-2));
+            box-shadow: 0 12px 24px rgba(37,99,235,0.28);
+        }
+
+        .nav-links a.secondary {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .nav-links a.logout {
+            background: rgba(239,68,68,0.12);
+            border-color: rgba(239,68,68,0.25);
+            color: #fecaca;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+        }
+
+        .metrics {
+            position: relative;
+            z-index: 2;
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 18px;
+            backdrop-filter: blur(12px);
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin: 30px 0 18px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .section-head p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .flash {
+            padding: 16px 18px;
+            margin-top: 18px;
+            border-radius: 16px;
+            border: 1px solid;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .flash.success {
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.32);
+            color: #bbf7d0;
+        }
+
+        .flash.warning {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.32);
+            color: #fde68a;
+        }
+
+        .flash.danger {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.32);
+            color: #fecaca;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 22px;
+        }
+
+        .app-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(18, 30, 58, 0.85), rgba(9, 18, 36, 0.92));
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+            min-height: 360px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-card::before {
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(79,140,255,0.18), transparent 65%);
+            pointer-events: none;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 28px 70px rgba(0,0,0,0.42);
+            border-color: rgba(79,140,255,0.34);
+        }
+
+        .app-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .app-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .app-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            font-size: 26px;
+            background: linear-gradient(135deg, rgba(79,140,255,0.24), rgba(245,201,106,0.12));
+            border: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+        }
+
+        .app-title-wrap {
+            min-width: 0;
+        }
+
+        .app-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            margin: 0 0 5px;
+            word-break: break-word;
+        }
+
+        .app-sub {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.10);
+            white-space: nowrap;
+        }
+
+        .status-pill.verified {
+            background: rgba(34,197,94,0.14);
+            color: #86efac;
+            border-color: rgba(34,197,94,0.30);
+        }
+
+        .status-pill.retry {
+            background: rgba(245,158,11,0.14);
+            color: #fde68a;
+            border-color: rgba(245,158,11,0.30);
+        }
+
+        .status-pill.denied {
+            background: rgba(239,68,68,0.14);
+            color: #fecaca;
+            border-color: rgba(239,68,68,0.30);
+        }
+
+        .status-pill.pending {
+            background: rgba(59,130,246,0.12);
+            color: #93c5fd;
+            border-color: rgba(59,130,246,0.28);
+        }
+
+        .app-desc {
+            color: #c7d4ea;
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 14px 0 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .decision-reason {
+            margin: 4px 0 18px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 13px;
+            color: #bfd0ea;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .card-actions {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-actions a {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 15px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.22s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, var(--blue), var(--blue-2));
+            box-shadow: 0 10px 24px rgba(37,99,235,0.28);
+        }
+
+        .btn-secondary {
+            color: #dbeafe;
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .btn-warning {
+            color: white;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 10px 24px rgba(245,158,11,0.24);
+        }
+
+        .card-actions a:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-box {
+            background: linear-gradient(180deg, rgba(18, 30, 58, 0.85), rgba(9, 18, 36, 0.92));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 34px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .empty-box h3 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .empty-box p {
+            margin: 0 0 20px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .empty-box a {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--blue), var(--blue-2));
+        }
+
+        #botContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+        }
+
+        #botBubble {
+            width: 66px;
+            height: 66px;
+            background: linear-gradient(135deg, #2563eb, #4f8cff);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            cursor: pointer;
+            box-shadow: 0 18px 34px rgba(37,99,235,0.34);
+            transition: 0.25s ease;
+        }
+
+        #botBubble:hover {
+            transform: scale(1.06);
+        }
+
+        #botChat {
+            display: none;
+            width: 340px;
+            height: 420px;
+            background: rgba(7, 14, 28, 0.96);
+            border-radius: 22px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 24px 50px rgba(0,0,0,0.40);
+            backdrop-filter: blur(14px);
+        }
+
+        #botHeader {
+            background: linear-gradient(135deg, #2563eb, #4f8cff);
+            padding: 14px 16px;
+            color: white;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #languageSelect {
+            background: white;
+            color: #111827;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 13px;
+        }
+
+        #botMessages {
+            padding: 14px;
+            font-size: 14px;
+            height: 352px;
+            overflow-y: auto;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        .bot-msg {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 980px) {
+            .metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .topbar {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-shell {
+                width: 94%;
+            }
+
+            .hero {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #botChat {
+                width: 300px;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        {% set total_apps = app_data|length %}
+        {% set verified_count = namespace(value=0) %}
+        {% set retry_count = namespace(value=0) %}
+        {% set denied_count = namespace(value=0) %}
+
+        {% for item in app_data %}
+            {% if item.last_attempt %}
+                {% if item.last_attempt.status == 'verified' %}
+                    {% set verified_count.value = verified_count.value + 1 %}
+                {% elif item.last_attempt.status == 'retry' %}
+                    {% set retry_count.value = retry_count.value + 1 %}
+                {% elif item.last_attempt.status == 'denied' %}
+                    {% set denied_count.value = denied_count.value + 1 %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <section class="hero">
+            <div class="topbar">
+                <div>
+                    <div class="brand-tag">🔐 ExpreseQ Security Layer</div>
+                    <h1>Welcome back, {{ user.name }}</h1>
+                    <p>
+                        Manage protected apps, update enrolled expression profiles, and monitor verification outcomes
+                        through a cleaner, premium ExpreseQ control center.
+                    </p>
+                </div>
+
+                <div class="nav-links">
+                    <a href="{{ url_for('add_app') }}" class="primary">+ Add Protected App</a>
+                    <a href="{{ url_for('alerts') }}" class="secondary">View Alerts</a>
+                    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+                </div>
+            </div>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-label">Protected Apps</div>
+                    <div class="metric-value">{{ total_apps }}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Verified</div>
+                    <div class="metric-value">{{ verified_count.value }}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Retry Needed</div>
+                    <div class="metric-value">{{ retry_count.value }}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Denied Attempts</div>
+                    <div class="metric-value">{{ denied_count.value }}</div>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="flash {{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </section>
+
+        <div class="section-head">
+            <div>
+                <h2>Your Protected Apps</h2>
+                <p>Open apps, refresh expression profiles, and test challenge-based access flows.</p>
+            </div>
+        </div>
+
+        {% if app_data %}
+            <div class="apps-grid">
+                {% for item in app_data %}
+                    {% set app = item.app %}
+                    {% set attempt = item.last_attempt %}
+                    {% set app_name_lower = app.app_name.lower().strip() %}
+
+                    <div class="app-card">
+                        <div class="app-top">
+                            <div class="app-left">
+                                <div class="app-icon">
+                                    {% if app_name_lower == "whatsapp" %}💬
+                                    {% elif app_name_lower == "linkedin" %}💼
+                                    {% elif app_name_lower == "instagram" %}📸
+                                    {% elif app_name_lower == "youtube" %}▶️
+                                    {% elif app_name_lower == "bank" %}🏦
+                                    {% else %}🔐
+                                    {% endif %}
+                                </div>
+
+                                <div class="app-title-wrap">
+                                    <div class="app-name">{{ app.app_name }}</div>
+                                    <div class="app-sub">Protected by live expression verification</div>
+                                </div>
+                            </div>
+
+                            {% if attempt %}
+                                <div class="status-pill {{ attempt.status }}">
+                                    {{ attempt.status }}
+                                </div>
+                            {% else %}
+                                <div class="status-pill pending">no checks</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="app-desc">
+                            ExpreseQ secures this app with face matching, expression similarity, and motion-based liveness scoring.
+                        </div>
+
+                        {% if attempt %}
+                            <div class="stats-grid">
+                                <div class="stat-box">
+                                    <div class="stat-label">Face Score</div>
+                                    <div class="stat-value">{{ '%.2f'|format(attempt.face_score_raw or 0) }}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Expression Score</div>
+                                    <div class="stat-value">{{ '%.2f'|format(attempt.expression_score_raw or 0) }}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Liveness Score</div>
+                                    <div class="stat-value">{{ '%.2f'|format(attempt.liveness_score_raw or 0) }}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Combined Score</div>
+                                    <div class="stat-value">{{ '%.2f'|format(attempt.score or 0) }}</div>
+                                </div>
+                            </div>
+
+                            {% if attempt.decision_reason %}
+                                <div class="decision-reason">
+                                    <strong>Reason:</strong> {{ attempt.decision_reason }}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="decision-reason">
+                                No verification attempt recorded yet for this app.
+                            </div>
+                        {% endif %}
+
+                        <div class="card-actions">
+                            <a href="{{ url_for('open_app', app_id=app.id) }}" class="btn-primary">Open App</a>
+                            <a href="{{ url_for('record_expression', app_id=app.id) }}" class="btn-secondary">Record / Update Expression</a>
+                            <a href="{{ url_for('simulate_access', app_id=app.id) }}" class="btn-warning">Simulate Access</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-box">
+                <h3>No protected apps yet</h3>
+                <p>
+                    Start by adding an app you want ExpreseQ to secure with live facial verification,
+                    expression-based matching, and suspicious-access challenge handling.
+                </p>
+                <a href="{{ url_for('add_app') }}">Add Your First App</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="botContainer">
+        <div id="botChat">
+            <div id="botHeader">
+                <span>ExpreseQ Assistant</span>
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="te">తెలుగు</option>
+                </select>
+            </div>
+            <div id="botMessages"></div>
+        </div>
+        <div id="botBubble">💬</div>
+    </div>
+
+    <script>
+    const botBubble = document.getElementById("botBubble");
+    const botChat = document.getElementById("botChat");
+    const botMessages = document.getElementById("botMessages");
+    const languageSelect = document.getElementById("languageSelect");
+
+    let botStarted = false;
+    let selectedLanguage = localStorage.getItem("expreseq_lang") || "en";
+    languageSelect.value = selectedLanguage;
+
+    const botText = {
+        en: {
+            home1: "Hi 👋 I’m ExpreseQ Assistant.",
+            home2: "I help you protect apps using live facial verification.",
+            register1: "Hi 👋 I’m ExpreseQ Assistant.",
+            register2: "Create your account to activate your human verification firewall.",
+            login1: "Hi 👋 I’m ExpreseQ Assistant.",
+            login2: "Please log in to access your secure dashboard and protected apps.",
+            dashboard1: "Welcome to your secure dashboard.",
+            dashboard2: "Start by adding an app you want to protect.",
+            addApp1: "Enter the name of the app you want to secure.",
+            record1: "Face the camera clearly.",
+            record2: "Record your expression for a few seconds.",
+            verify1: "Please repeat your saved expression.",
+            verify2: "Make small natural movements for verification.",
+            unlocked: "Access granted.",
+            denied: "Access denied.",
+            retry: "Please try again with better alignment or clearer expression."
+        },
+        hi: {
+            home1: "नमस्ते 👋 मैं ExpreseQ सहायक हूँ।",
+            home2: "मैं आपके ऐप्स को लाइव चेहरे की पुष्टि से सुरक्षित रखने में मदद करता हूँ।",
+            register1: "नमस्ते 👋 मैं ExpreseQ सहायक हूँ।",
+            register2: "अपना खाता बनाएं और अपने ऐप्स की सुरक्षा शुरू करें।",
+            login1: "नमस्ते 👋 मैं ExpreseQ सहायक हूँ।",
+            login2: "अपने सुरक्षित डैशबोर्ड और ऐप्स तक पहुँचने के लिए लॉगिन करें।",
+            dashboard1: "आपके सुरक्षित डैशबोर्ड में स्वागत है।",
+            dashboard2: "जिस ऐप को सुरक्षित करना चाहते हैं, उसे जोड़कर शुरू करें।",
+            addApp1: "जिस ऐप को सुरक्षित करना है उसका नाम दर्ज करें।",
+            record1: "कृपया कैमरे की ओर स्पष्ट रूप से देखें।",
+            record2: "कुछ सेकंड के लिए अपनी अभिव्यक्ति रिकॉर्ड करें।",
+            verify1: "कृपया अपनी सहेजी हुई अभिव्यक्ति दोहराएँ।",
+            verify2: "सत्यापन के लिए हल्की प्राकृतिक हरकत करें।",
+            unlocked: "प्रवेश स्वीकृत।",
+            denied: "प्रवेश अस्वीकृत।",
+            retry: "कृपया बेहतर एलाइनमेंट या स्पष्ट अभिव्यक्ति के साथ फिर प्रयास करें।"
+        },
+        te: {
+            home1: "హాయ్ 👋 నేను ExpreseQ సహాయకుడు.",
+            home2: "లైవ్ ఫేషియల్ వెరిఫికేషన్ ద్వారా మీ యాప్‌లను రక్షించడంలో నేను సహాయం చేస్తాను.",
+            register1: "హాయ్ 👋 నేను ExpreseQ సహాయకుడు.",
+            register2: "మీ ఖాతాను సృష్టించి మీ యాప్‌లను రక్షించడం ప్రారంభించండి.",
+            login1: "హాయ్ 👋 నేను ExpreseQ సహాయకుడు.",
+            login2: "మీ సురక్షిత డ్యాష్‌బోర్డ్ మరియు యాప్‌లను యాక్సెస్ చేయడానికి లాగిన్ అవ్వండి.",
+            dashboard1: "మీ సురక్షిత డ్యాష్‌బోర్డ్‌కు స్వాగతం.",
+            dashboard2: "మీరు రక్షించాలనుకునే యాప్‌ను జోడించడం ద్వారా ప్రారంభించండి.",
+            addApp1: "మీరు సురక్షితంగా ఉంచాలనుకునే యాప్ పేరు నమోదు చేయండి.",
+            record1: "దయచేసి కెమెరా వైపు స్పష్టంగా చూడండి.",
+            record2: "కొన్ని సెకన్ల పాటు మీ ఎక్స్‌ప్రెషన్‌ను రికార్డ్ చేయండి.",
+            verify1: "దయచేసి మీరు సేవ్ చేసిన ఎక్స్‌ప్రెషన్‌ను మళ్లీ చేయండి.",
+            verify2: "వెరిఫికేషన్ కోసం స్వల్ప సహజ కదలికలు చేయండి.",
+            unlocked: "ప్రవేశం అనుమతించబడింది.",
+            denied: "ప్రవేశం నిరాకరించబడింది.",
+            retry: "దయచేసి మంచి అలైన్‌మెంట్ లేదా స్పష్టమైన ఎక్స్‌ప్రెషన్‌తో మళ్లీ ప్రయత్నించండి."
+        }
+    };
+
+    function getLangText(key) {
+        return botText[selectedLanguage]?.[key] || botText.en[key] || "";
+    }
+
+    function speak(text) {
+        if (!("speechSynthesis" in window)) return;
+
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(text);
+
+        if (selectedLanguage === "hi") speech.lang = "hi-IN";
+        else if (selectedLanguage === "te") speech.lang = "te-IN";
+        else speech.lang = "en-US";
+
+        speech.volume = 1;
+        speech.rate = 1;
+        speech.pitch = 1;
+
+        const voices = window.speechSynthesis.getVoices();
+        const matchingVoice = voices.find(v =>
+            v.lang.toLowerCase().startsWith(speech.lang.toLowerCase().split("-")[0])
+        );
+        if (matchingVoice) speech.voice = matchingVoice;
+
+        window.speechSynthesis.speak(speech);
+    }
+
+    function botSay(message, shouldSpeak = true) {
+        const msg = document.createElement("div");
+        msg.className = "bot-msg";
+        msg.innerText = message;
+        botMessages.appendChild(msg);
+        botMessages.scrollTop = botMessages.scrollHeight;
+        if (shouldSpeak) speak(message);
+    }
+
+    function clearBotMessages() {
+        botMessages.innerHTML = "";
+    }
+
+    function loadPageBotMessages(speakMessages = false) {
+        clearBotMessages();
+        const path = window.location.pathname;
+
+        if (path === "/") {
+            botSay(getLangText("home1"), speakMessages);
+            botSay(getLangText("home2"), speakMessages);
+        } else if (path.includes("dashboard")) {
+            botSay(getLangText("dashboard1"), speakMessages);
+            botSay(getLangText("dashboard2"), speakMessages);
+        }  else if (path.includes("register")) {
+             botSay(getLangText("register1"), speakMessages);
+             botSay(getLangText("register2"), speakMessages);
+        }  else if (path.includes("login")) {
+             botSay(getLangText("login1"), speakMessages);
+             botSay(getLangText("login2"), speakMessages);
+        } else if (path.includes("add_app")) {
+            botSay(getLangText("addApp1"), speakMessages);
+        } else if (path.includes("record_expression")) {
+            botSay(getLangText("record1"), speakMessages);
+            botSay(getLangText("record2"), speakMessages);
+        } else if (path.includes("verify_access")) {
+            botSay(getLangText("verify1"), speakMessages);
+            botSay(getLangText("verify2"), speakMessages);
+        }
+    }
+
+    botBubble.onclick = () => {
+        const isOpen = botChat.style.display === "block";
+        botChat.style.display = isOpen ? "none" : "block";
+
+        if (!botStarted) {
+            botStarted = true;
+            loadPageBotMessages(true);
+        }
+    };
+
+    languageSelect.onchange = (e) => {
+        selectedLanguage = e.target.value;
+        localStorage.setItem("expreseq_lang", selectedLanguage);
+        loadPageBotMessages(botStarted);
+    };
+
+    window.speechSynthesis.onvoiceschanged = () => {};
+    </script>
+</body>
+</html>
