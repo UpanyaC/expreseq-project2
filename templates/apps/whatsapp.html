@@ -1,22 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>WhatsApp</title>
+    <meta charset="UTF-8">
+    <title>WhatsApp | ExpreseQ</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #111b21; color: white; margin: 0; }
-        .header { background: #202c33; padding: 16px 24px; font-size: 22px; font-weight: bold; }
-        .content { padding: 30px; }
-        .chat { background: #202c33; border-radius: 12px; padding: 20px; margin-top: 20px; }
-        a { color: white; background: #25d366; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111b21;
+            color: white;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #202c33;
+            padding: 12px 20px;
+        }
+
+        .topbar-left {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .topbar-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background: #25d366;
+            color: black;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .layout {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        /* Sidebar (chat list) */
+        .sidebar {
+            width: 30%;
+            background: #111b21;
+            border-right: 1px solid #2a3942;
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            padding: 16px;
+            border-bottom: 1px solid #2a3942;
+            cursor: pointer;
+        }
+
+        .chat-item:hover {
+            background: #202c33;
+        }
+
+        .chat-name {
+            font-weight: bold;
+        }
+
+        .chat-preview {
+            font-size: 13px;
+            color: #aebac1;
+        }
+
+        /* Chat window */
+        .chat-window {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0b141a;
+        }
+
+        .chat-header {
+            padding: 16px;
+            background: #202c33;
+            font-weight: bold;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .msg {
+            max-width: 60%;
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .received {
+            background: #202c33;
+        }
+
+        .sent {
+            background: #005c4b;
+            align-self: flex-end;
+        }
+
+        .input-box {
+            display: flex;
+            padding: 10px;
+            background: #202c33;
+        }
+
+        .input-box input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        .input-box button {
+            margin-left: 10px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #25d366;
+            font-weight: bold;
+        }
+
+        .security-banner {
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+        }
     </style>
 </head>
+
 <body>
-    <div class="header">WhatsApp</div>
-    <div class="content">
-        <h2>🔓 Access Granted</h2>
-        <p>Welcome to your protected WhatsApp demo page.</p>
-        <div class="chat">This is a secure WhatsApp-style demo interface inside ExpreseQ.</div>
-        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+    <div class="topbar">
+        <div class="topbar-left">💬 WhatsApp</div>
+
+        <div class="topbar-right">
+            <div class="btn" style="background:#16a34a;">🟢 Secure Session</div>
+            <a href="{{ url_for('dashboard') }}" class="btn">Dashboard</a>
+        </div>
     </div>
+
+    <div class="security-banner">
+        Verified by ExpreseQ • Live face + expression + liveness confirmed
+    </div>
+
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="chat-item">
+                <div class="chat-name">Mom ❤️</div>
+                <div class="chat-preview">Did you eat?</div>
+            </div>
+
+            <div class="chat-item">
+                <div class="chat-name">Project Team</div>
+                <div class="chat-preview">Let's push the update 🚀</div>
+            </div>
+
+            <div class="chat-item">
+                <div class="chat-name">Bank Alerts</div>
+                <div class="chat-preview">Your balance updated</div>
+            </div>
+
+            <div class="chat-item">
+                <div class="chat-name">Friend Group</div>
+                <div class="chat-preview">Weekend plans?</div>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window">
+
+            <div class="chat-header">
+                Mom ❤️
+            </div>
+
+            <div class="messages">
+                <div class="msg received">Hi beta, how are you?</div>
+                <div class="msg sent">I’m good! Working on my project 😊</div>
+                <div class="msg received">Don’t skip meals!</div>
+                <div class="msg sent">Yes mom 😄</div>
+            </div>
+
+            <div class="input-box">
+                <input type="text" placeholder="Type a message...">
+                <button>Send</button>
+            </div>
+
+        </div>
+
+    </div>
+
 </body>
 </html>
