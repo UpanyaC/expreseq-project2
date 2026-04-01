@@ -1,26 +1,436 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Bank</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Bank | ExpreseQ</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #0b1020; color: white; margin: 0; }
-        .header { background: #1d4ed8; padding: 16px 24px; font-size: 22px; font-weight: bold; }
-        .content { padding: 30px; }
-        .card { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; margin-top: 20px; }
-        a { color: white; background: #2563eb; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #071224, #0b1020 45%, #101a33 100%);
+            color: #f8fafc;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 28px;
+            background: rgba(17, 24, 39, 0.92);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand-text p {
+            margin: 3px 0 0;
+            color: #93c5fd;
+            font-size: 13px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .session-pill {
+            background: rgba(34, 197, 94, 0.12);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.28);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .nav-btn.secondary {
+            background: rgba(255,255,255,0.08);
+            color: #e5e7eb;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+
+        .security-banner {
+            background: linear-gradient(90deg, rgba(37,99,235,0.18), rgba(56,189,248,0.10));
+            border: 1px solid rgba(96,165,250,0.25);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+        }
+
+        .security-banner h2 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .security-banner p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+
+        .panel h3 {
+            margin: 0 0 16px;
+            font-size: 22px;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .account-card {
+            border-radius: 16px;
+            padding: 18px;
+            min-height: 170px;
+        }
+
+        .checking {
+            background: linear-gradient(135deg, rgba(37,99,235,0.28), rgba(30,64,175,0.16));
+            border: 1px solid rgba(96,165,250,0.18);
+        }
+
+        .savings {
+            background: linear-gradient(135deg, rgba(34,197,94,0.18), rgba(22,101,52,0.14));
+            border: 1px solid rgba(74,222,128,0.16);
+        }
+
+        .account-label {
+            color: #bfdbfe;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .account-balance {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .account-meta {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .action-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .action-card h4 {
+            margin: 0 0 8px;
+            font-size: 17px;
+        }
+
+        .action-card p {
+            margin: 0 0 14px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 22px;
+        }
+
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .txn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 14px 16px;
+        }
+
+        .txn-left h4 {
+            margin: 0 0 4px;
+            font-size: 16px;
+        }
+
+        .txn-left p {
+            margin: 0;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .txn-amount {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .txn-amount.debit {
+            color: #fca5a5;
+        }
+
+        .txn-amount.credit {
+            color: #86efac;
+        }
+
+        .profile-card p {
+            color: #cbd5e1;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .profile-card strong {
+            color: #ffffff;
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        @media (max-width: 960px) {
+            .dashboard-grid,
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .accounts-grid,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .topbar-right {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">Bank</div>
-    <div class="content">
-        <h2>🔓 Access Granted</h2>
-        <div class="card">
-            <h3>Account Overview</h3>
-            <p>Checking Balance: $12,450.00</p>
-            <p>Savings Balance: $48,200.00</p>
-            <p>This is a secure banking demo page protected by ExpreseQ.</p>
+    <div class="topbar">
+        <div class="brand">
+            <div class="brand-badge">🏦</div>
+            <div class="brand-text">
+                <h1>Secure Bank</h1>
+                <p>Protected by ExpreseQ Human Verification Firewall</p>
+            </div>
         </div>
-        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+        <div class="topbar-right">
+            <div class="session-pill">🟢 Secure Session Active</div>
+            <a href="{{ url_for('dashboard') }}" class="nav-btn secondary">Back to Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="nav-btn">Lock Session</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="security-banner">
+            <h2>🔓 Access Granted</h2>
+            <p>
+                Identity confirmed through ExpreseQ using live facial verification, expression matching,
+                and liveness-aware access control. Your banking session is now protected.
+            </p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="panel">
+                <h3>Account Overview</h3>
+                <div class="accounts-grid">
+                    <div class="account-card checking">
+                        <div class="account-label">Checking Account</div>
+                        <div class="account-balance">$12,450.00</div>
+                        <div class="account-meta">
+                            Account ending in 4421<br>
+                            Available balance updated just now
+                        </div>
+                    </div>
+
+                    <div class="account-card savings">
+                        <div class="account-label">Savings Account</div>
+                        <div class="account-balance">$48,200.00</div>
+                        <div class="account-meta">
+                            Account ending in 1187<br>
+                            Interest rate: 3.90% APY
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Quick Actions</h3>
+                <div class="quick-actions">
+                    <div class="action-card">
+                        <h4>Transfer Money</h4>
+                        <p>Move funds between accounts or send a scheduled transfer.</p>
+                        <a href="#" class="action-btn">Transfer</a>
+                    </div>
+
+                    <div class="action-card">
+                        <h4>Pay Bills</h4>
+                        <p>Review upcoming utilities, credit card, and recurring payments.</p>
+                        <a href="#" class="action-btn">Pay Bills</a>
+                    </div>
+
+                    <div class="action-card">
+                        <h4>Statements</h4>
+                        <p>View your monthly statements and recent account activity reports.</p>
+                        <a href="#" class="action-btn">Statements</a>
+                    </div>
+
+                    <div class="action-card">
+                        <h4>Card Controls</h4>
+                        <p>Temporarily lock cards, update limits, and manage spending alerts.</p>
+                        <a href="#" class="action-btn">Manage Cards</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            <div class="panel">
+                <h3>Recent Transactions</h3>
+                <div class="transaction-list">
+                    <div class="txn">
+                        <div class="txn-left">
+                            <h4>Payroll Deposit</h4>
+                            <p>Today • Direct deposit</p>
+                        </div>
+                        <div class="txn-amount credit">+$3,250.00</div>
+                    </div>
+
+                    <div class="txn">
+                        <div class="txn-left">
+                            <h4>Electric Utility</h4>
+                            <p>Yesterday • Auto-pay</p>
+                        </div>
+                        <div class="txn-amount debit">-$142.18</div>
+                    </div>
+
+                    <div class="txn">
+                        <div class="txn-left">
+                            <h4>Grocery Market</h4>
+                            <p>Mar 30 • Card payment</p>
+                        </div>
+                        <div class="txn-amount debit">-$86.45</div>
+                    </div>
+
+                    <div class="txn">
+                        <div class="txn-left">
+                            <h4>Online Transfer</h4>
+                            <p>Mar 29 • To savings</p>
+                        </div>
+                        <div class="txn-amount debit">-$500.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel profile-card">
+                <h3>Customer Profile</h3>
+                <p><strong>Name:</strong> {{ user.name if user else "ExpreseQ User" }}</p>
+                <p><strong>Protected App:</strong> {{ app.app_name }}</p>
+                <p><strong>Session Status:</strong> Verified and active</p>
+                <p><strong>Protection Layer:</strong> ExpreseQ live identity firewall</p>
+                <p><strong>Security Note:</strong> This is a secure banking demo page opened only after successful ExpreseQ verification.</p>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            Secure banking access is currently being protected by ExpreseQ’s live human verification layer.
+        </div>
     </div>
 </body>
 </html>
