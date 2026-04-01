@@ -1,24 +1,436 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Instagram</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram | ExpreseQ</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #111; color: white; margin: 0; }
-        .header { padding: 16px 24px; font-size: 22px; font-weight: bold; background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045); }
-        .content { padding: 30px; }
-        .post { background: #1c1c1c; border-radius: 12px; padding: 20px; margin-top: 20px; }
-        a { color: white; background: #e1306c; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f0f10;
+            color: white;
+        }
+
+        .topbar {
+            background: #111;
+            border-bottom: 1px solid #262626;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-left {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .topbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pill {
+            background: rgba(34, 197, 94, 0.12);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.28);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: #e1306c;
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .security-banner {
+            background: rgba(225, 48, 108, 0.10);
+            border-bottom: 1px solid rgba(225, 48, 108, 0.25);
+            text-align: center;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #f9a8d4;
+            font-weight: 600;
+        }
+
+        .layout {
+            max-width: 1180px;
+            margin: 24px auto;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 26px;
+            padding: 0 20px;
+        }
+
+        .stories {
+            display: flex;
+            gap: 16px;
+            padding: 18px;
+            background: #121212;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .story {
+            text-align: center;
+            min-width: 72px;
+        }
+
+        .story-ring {
+            width: 66px;
+            height: 66px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            margin: 0 auto 8px;
+        }
+
+        .story-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .story-name {
+            font-size: 12px;
+            color: #d1d5db;
+        }
+
+        .feed-card {
+            background: #121212;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-ring {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .post-user-info h4 {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .post-user-info p {
+            margin: 3px 0 0;
+            font-size: 12px;
+            color: #a1a1aa;
+        }
+
+        .post-image {
+            height: 360px;
+            background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #f9a8d4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .post-actions {
+            padding: 14px 16px 8px;
+            font-size: 20px;
+            display: flex;
+            gap: 14px;
+        }
+
+        .post-body {
+            padding: 0 16px 16px;
+        }
+
+        .post-likes {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .post-caption {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #f3f4f6;
+        }
+
+        .post-caption strong {
+            color: white;
+        }
+
+        .post-time {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #a1a1aa;
+            text-transform: uppercase;
+        }
+
+        .sidebar-card {
+            background: #121212;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .profile-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .profile-info h3 {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .profile-info p {
+            margin: 4px 0 0;
+            color: #a1a1aa;
+            font-size: 13px;
+        }
+
+        .side-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .suggestion {
+            padding: 10px 0;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .suggestion-sub {
+            color: #a1a1aa;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 960px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">Instagram</div>
-    <div class="content">
-        <h2>🔓 Access Granted</h2>
-        <div class="post">
-            <h3>Your Instagram Demo</h3>
-            <p>This is a protected Instagram-style page unlocked after successful verification.</p>
+
+    <div class="topbar">
+        <div class="topbar-left">Instagram</div>
+        <div class="topbar-right">
+            <div class="pill">🟢 Secure Session Active</div>
+            <a href="{{ url_for('dashboard') }}" class="btn">Dashboard</a>
         </div>
-        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
     </div>
+
+    <div class="security-banner">
+        Verified by ExpreseQ • Live face + expression + liveness confirmed
+    </div>
+
+    <div class="layout">
+
+        <!-- Main Feed -->
+        <div>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-ring"><div class="story-inner">Y</div></div>
+                    <div class="story-name">You</div>
+                </div>
+                <div class="story">
+                    <div class="story-ring"><div class="story-inner">T</div></div>
+                    <div class="story-name">Travel</div>
+                </div>
+                <div class="story">
+                    <div class="story-ring"><div class="story-inner">D</div></div>
+                    <div class="story-name">Design</div>
+                </div>
+                <div class="story">
+                    <div class="story-ring"><div class="story-inner">A</div></div>
+                    <div class="story-name">AI Hub</div>
+                </div>
+                <div class="story">
+                    <div class="story-ring"><div class="story-inner">S</div></div>
+                    <div class="story-name">Security</div>
+                </div>
+            </div>
+
+            <div class="feed-card">
+                <div class="post-header">
+                    <div class="post-user">
+                        <div class="avatar-ring"><div class="avatar-inner">E</div></div>
+                        <div class="post-user-info">
+                            <h4>expreseq.security</h4>
+                            <p>Protected access layer</p>
+                        </div>
+                    </div>
+                    <div>•••</div>
+                </div>
+
+                <div class="post-image">
+                    🔓 Instagram unlocked after ExpreseQ verification
+                </div>
+
+                <div class="post-actions">❤️ 💬 📤 🔖</div>
+
+                <div class="post-body">
+                    <div class="post-likes">1,482 likes</div>
+                    <div class="post-caption">
+                        <strong>expreseq.security</strong>
+                        Your Instagram demo session is now protected by live face verification,
+                        expression matching, and liveness-aware access checks.
+                    </div>
+                    <div class="post-time">Just now</div>
+                </div>
+            </div>
+
+            <div class="feed-card">
+                <div class="post-header">
+                    <div class="post-user">
+                        <div class="avatar-ring"><div class="avatar-inner">A</div></div>
+                        <div class="post-user-info">
+                            <h4>ai.creators</h4>
+                            <p>Innovation feed</p>
+                        </div>
+                    </div>
+                    <div>•••</div>
+                </div>
+
+                <div class="post-image">
+                    ✨ The future of secure access is human-aware verification
+                </div>
+
+                <div class="post-actions">❤️ 💬 📤 🔖</div>
+
+                <div class="post-body">
+                    <div class="post-likes">932 likes</div>
+                    <div class="post-caption">
+                        <strong>ai.creators</strong>
+                        Smarter security experiences combine usability, liveness, and behavior-aware authentication.
+                    </div>
+                    <div class="post-time">2 hours ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+            <div class="sidebar-card">
+                <div class="profile-box">
+                    <div class="profile-avatar">{{ user.name[0] if user and user.name else "U" }}</div>
+                    <div class="profile-info">
+                        <h3>{{ user.name if user else "ExpreseQ User" }}</h3>
+                        <p>{{ app.app_name }} • Verified session</p>
+                    </div>
+                </div>
+
+                <div class="side-title">Session Security</div>
+                <div class="suggestion">
+                    <div class="suggestion-name">Protected App</div>
+                    <div class="suggestion-sub">{{ app.app_name }} opened only after successful ExpreseQ verification.</div>
+                </div>
+                <div class="suggestion">
+                    <div class="suggestion-name">Security Layer</div>
+                    <div class="suggestion-sub">Live face + expression + liveness verification active.</div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="side-title">Suggestions for you</div>
+
+                <div class="suggestion">
+                    <div class="suggestion-name">secure.identity</div>
+                    <div class="suggestion-sub">Identity security insights</div>
+                </div>
+
+                <div class="suggestion">
+                    <div class="suggestion-name">startup.builders</div>
+                    <div class="suggestion-sub">Product and startup community</div>
+                </div>
+
+                <div class="suggestion">
+                    <div class="suggestion-name">vision.ai</div>
+                    <div class="suggestion-sub">Computer vision research and demos</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </body>
 </html>
