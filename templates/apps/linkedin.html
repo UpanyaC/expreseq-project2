@@ -1,24 +1,331 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>LinkedIn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn | ExpreseQ</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f3f2ef; color: #1d2226; margin: 0; }
-        .header { background: #0a66c2; color: white; padding: 16px 24px; font-size: 22px; font-weight: bold; }
-        .content { padding: 30px; }
-        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        a { color: white; background: #0a66c2; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f2ef;
+            color: #1d2226;
+        }
+
+        .topbar {
+            background: #0a66c2;
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-left {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .topbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pill {
+            background: rgba(255,255,255,0.18);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: white;
+            color: #0a66c2;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .security-banner {
+            background: #e8f3ff;
+            color: #0a66c2;
+            border-bottom: 1px solid #cfe5ff;
+            text-align: center;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .layout {
+            max-width: 1280px;
+            margin: 24px auto;
+            display: grid;
+            grid-template-columns: 260px 1fr 300px;
+            gap: 20px;
+            padding: 0 18px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .profile-cover {
+            height: 72px;
+            background: linear-gradient(135deg, #0a66c2, #60a5fa);
+        }
+
+        .profile-body {
+            padding: 18px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: #dbeafe;
+            margin: -50px auto 12px;
+            border: 4px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #0a66c2;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .profile-role {
+            font-size: 14px;
+            color: #526a6e;
+            line-height: 1.5;
+        }
+
+        .profile-meta {
+            margin-top: 16px;
+            text-align: left;
+            font-size: 14px;
+            color: #526a6e;
+            line-height: 1.8;
+        }
+
+        .feed-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .post-box {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .post-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            font-size: 14px;
+            color: #374151;
+            background: #f9fafb;
+        }
+
+        .post {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .post-author {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .post-role {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .post-content {
+            line-height: 1.6;
+            color: #1f2937;
+            margin-bottom: 14px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 18px;
+            font-size: 14px;
+            color: #526a6e;
+            font-weight: 600;
+        }
+
+        .side-card {
+            padding: 18px;
+        }
+
+        .side-card h3 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        .item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .item-sub {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1080px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">LinkedIn</div>
-    <div class="content">
-        <h2>🔓 Access Granted</h2>
-        <div class="card">
-            <h3>Your LinkedIn Demo Feed</h3>
-            <p>This is a protected LinkedIn-style page unlocked by ExpreseQ verification.</p>
+
+    <div class="topbar">
+        <div class="topbar-left">LinkedIn</div>
+        <div class="topbar-right">
+            <div class="pill">🟢 Secure Session Active</div>
+            <a href="{{ url_for('dashboard') }}" class="btn">Dashboard</a>
         </div>
-        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
     </div>
+
+    <div class="security-banner">
+        Verified by ExpreseQ • Live face + expression + liveness confirmed
+    </div>
+
+    <div class="layout">
+
+        <!-- Left Profile Panel -->
+        <div class="panel">
+            <div class="profile-cover"></div>
+            <div class="profile-body">
+                <div class="avatar">{{ user.name[0] if user and user.name else "U" }}</div>
+                <div class="profile-name">{{ user.name if user else "ExpreseQ User" }}</div>
+                <div class="profile-role">
+                    AI Security Product Builder • Protecting apps with live human verification
+                </div>
+
+                <div class="profile-meta">
+                    <div><strong>Protected App:</strong> {{ app.app_name }}</div>
+                    <div><strong>Status:</strong> Verified and unlocked</div>
+                    <div><strong>Location:</strong> Secure access environment</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="panel">
+            <div class="feed-header">🔓 Access Granted</div>
+
+            <div class="post-box">
+                <input class="post-input" type="text" value="Start a post about your latest project..." readonly>
+            </div>
+
+            <div class="post">
+                <div class="post-author">ExpreseQ Security Update</div>
+                <div class="post-role">Protected access layer • Just now</div>
+                <div class="post-content">
+                    Your LinkedIn demo page has been unlocked after successful ExpreseQ verification.
+                    This session is protected using live face matching, expression verification, and liveness checks.
+                </div>
+                <div class="post-actions">
+                    <div>👍 Like</div>
+                    <div>💬 Comment</div>
+                    <div>🔁 Repost</div>
+                    <div>📤 Share</div>
+                </div>
+            </div>
+
+            <div class="post">
+                <div class="post-author">Career Network</div>
+                <div class="post-role">Product Security Community • 2h</div>
+                <div class="post-content">
+                    The future of digital identity is moving beyond passwords toward adaptive, human-aware verification systems.
+                    Multi-signal authentication is becoming essential for protecting modern applications.
+                </div>
+                <div class="post-actions">
+                    <div>👍 Like</div>
+                    <div>💬 Comment</div>
+                    <div>🔁 Repost</div>
+                    <div>📤 Share</div>
+                </div>
+            </div>
+
+            <div class="post">
+                <div class="post-author">Startup Builders Circle</div>
+                <div class="post-role">Innovation Feed • 5h</div>
+                <div class="post-content">
+                    Products that combine security, AI guidance, and user-friendly verification will define the next generation of trust online.
+                </div>
+                <div class="post-actions">
+                    <div>👍 Like</div>
+                    <div>💬 Comment</div>
+                    <div>🔁 Repost</div>
+                    <div>📤 Share</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="panel side-card">
+            <h3>LinkedIn Demo Insights</h3>
+
+            <div class="item">
+                <div class="item-title">Protected Session</div>
+                <div class="item-sub">This session was opened only after successful ExpreseQ identity verification.</div>
+            </div>
+
+            <div class="item">
+                <div class="item-title">Suggested Network</div>
+                <div class="item-sub">Security Engineers, Product Managers, AI Builders</div>
+            </div>
+
+            <div class="item">
+                <div class="item-title">Security Layer</div>
+                <div class="item-sub">Live expression-based authentication with app-level protection.</div>
+            </div>
+
+            <div class="item">
+                <div class="item-title">Next Action</div>
+                <div class="item-sub">Return to dashboard to test another protected app flow.</div>
+            </div>
+        </div>
+
+    </div>
+
 </body>
 </html>
