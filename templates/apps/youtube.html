@@ -1,24 +1,395 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>YouTube</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube | ExpreseQ</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #0f0f0f; color: white; margin: 0; }
-        .header { background: #212121; padding: 16px 24px; font-size: 22px; font-weight: bold; }
-        .content { padding: 30px; }
-        .video { background: #1f1f1f; border-radius: 12px; padding: 20px; margin-top: 20px; }
-        a { color: white; background: #ff0000; padding: 10px 16px; text-decoration: none; border-radius: 8px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .topbar {
+            background: #212121;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 14px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-left {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        .topbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pill {
+            background: rgba(34, 197, 94, 0.12);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.28);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: #ff0000;
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .security-banner {
+            background: rgba(255, 0, 0, 0.08);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.20);
+            text-align: center;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #fca5a5;
+            font-weight: 600;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: calc(100vh - 96px);
+        }
+
+        .sidebar {
+            background: #121212;
+            border-right: 1px solid #262626;
+            padding: 18px 14px;
+        }
+
+        .side-item {
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            color: #e5e7eb;
+            font-size: 14px;
+            font-weight: 600;
+            background: transparent;
+        }
+
+        .side-item.active {
+            background: #272727;
+        }
+
+        .side-item:hover {
+            background: #1f1f1f;
+        }
+
+        .main {
+            padding: 22px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
+            margin-bottom: 26px;
+        }
+
+        .video-player {
+            background: #1f1f1f;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+        }
+
+        .player-screen {
+            height: 420px;
+            background: linear-gradient(135deg, #151515, #232323);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #fca5a5;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .player-info {
+            padding: 18px 20px 20px;
+        }
+
+        .player-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .player-meta {
+            color: #a3a3a3;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .channel-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .channel-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .channel-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .channel-name {
+            font-weight: bold;
+        }
+
+        .channel-sub {
+            color: #a3a3a3;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .subscribe-btn {
+            background: white;
+            color: black;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .about-card {
+            background: #1f1f1f;
+            border-radius: 18px;
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+        }
+
+        .about-card h3 {
+            margin: 0 0 14px;
+            font-size: 20px;
+        }
+
+        .about-card p {
+            color: #d4d4d4;
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .about-pill {
+            display: inline-block;
+            background: #272727;
+            color: #e5e7eb;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            margin: 4px 6px 0 0;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .video-card {
+            background: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .thumb {
+            height: 150px;
+            background: linear-gradient(135deg, #202020, #303030);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fca5a5;
+            font-size: 20px;
+            text-align: center;
+            padding: 14px;
+        }
+
+        .video-body {
+            padding: 14px;
+        }
+
+        .video-title {
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .video-meta {
+            font-size: 13px;
+            color: #a3a3a3;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">YouTube</div>
-    <div class="content">
-        <h2>🔓 Access Granted</h2>
-        <div class="video">
-            <h3>Your YouTube Demo</h3>
-            <p>This is a protected YouTube-style page opened after ExpreseQ verification.</p>
+
+    <div class="topbar">
+        <div class="topbar-left">YouTube</div>
+        <div class="topbar-right">
+            <div class="pill">🟢 Secure Session Active</div>
+            <a href="{{ url_for('dashboard') }}" class="btn">Dashboard</a>
         </div>
-        <br><a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
     </div>
+
+    <div class="security-banner">
+        Verified by ExpreseQ • Live face + expression + liveness confirmed
+    </div>
+
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="side-item active">🏠 Home</div>
+            <div class="side-item">🎬 Shorts</div>
+            <div class="side-item">📺 Subscriptions</div>
+            <div class="side-item">🕘 History</div>
+            <div class="side-item">📚 Playlists</div>
+            <div class="side-item">👍 Liked Videos</div>
+            <div class="side-item">⚙️ Settings</div>
+        </div>
+
+        <!-- Main -->
+        <div class="main">
+
+            <div class="hero">
+                <div class="video-player">
+                    <div class="player-screen">
+                        🔓 YouTube unlocked after ExpreseQ verification
+                    </div>
+
+                    <div class="player-info">
+                        <div class="player-title">Secure App Access Demo • Protected by ExpreseQ</div>
+                        <div class="player-meta">128K views • Verified session • Just now</div>
+
+                        <div class="channel-box">
+                            <div class="channel-left">
+                                <div class="channel-avatar">E</div>
+                                <div>
+                                    <div class="channel-name">ExpreseQ Security</div>
+                                    <div class="channel-sub">Live human verification layer</div>
+                                </div>
+                            </div>
+
+                            <a href="#" class="subscribe-btn">Subscribe</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-card">
+                    <h3>Access Granted</h3>
+                    <p>
+                        Your YouTube demo page was opened only after successful ExpreseQ verification.
+                        This protected session uses live face recognition, expression matching,
+                        and liveness-aware access control.
+                    </p>
+                    <p>
+                        Protected App: <strong>{{ app.app_name }}</strong><br>
+                        User: <strong>{{ user.name if user else "ExpreseQ User" }}</strong>
+                    </p>
+
+                    <div class="about-pill">Live Face Match</div>
+                    <div class="about-pill">Expression Verified</div>
+                    <div class="about-pill">Liveness Checked</div>
+                    <div class="about-pill">Secure Session</div>
+                </div>
+            </div>
+
+            <div class="section-title">Recommended Videos</div>
+
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="thumb">🔐 Identity Security Systems Explained</div>
+                    <div class="video-body">
+                        <div class="video-title">How adaptive authentication is changing modern app security</div>
+                        <div class="video-meta">Security Lab • 2.1M views • 3 days ago</div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="thumb">🤖 AI + Cybersecurity Product Demo</div>
+                    <div class="video-body">
+                        <div class="video-title">Building human-aware security experiences with AI assistants</div>
+                        <div class="video-meta">AI Builders • 842K views • 1 week ago</div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="thumb">👁️ Face Verification vs Liveness Detection</div>
+                    <div class="video-body">
+                        <div class="video-title">Why biometric systems need more than just face matching</div>
+                        <div class="video-meta">Vision AI Hub • 610K views • 5 days ago</div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="thumb">🚀 Startup Demo Walkthrough</div>
+                    <div class="video-body">
+                        <div class="video-title">From prototype to product: building secure app unlock flows</div>
+                        <div class="video-meta">Founder Stories • 390K views • 2 weeks ago</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </body>
 </html>
