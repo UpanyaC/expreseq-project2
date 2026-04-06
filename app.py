@@ -279,7 +279,11 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-
+        try:
+           warmup_img = np.zeros((160, 160, 3), dtype=np.uint8)
+           DeepFace.represent(img_path=warmup_img, model_name="Facenet", enforce_detection=False)
+        except Exception as e:
+            print("DEEPFACE WARMUP WARNING:", e)
     def current_user():
         uid = session.get("user_id")
         if not uid:
